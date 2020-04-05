@@ -1,2 +1,2 @@
-def dispatch_request():
-    pass
+def dispatch_request(arguments):
+    print('got arguments ', arguments)

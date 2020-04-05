@@ -1,0 +1,21 @@
+#!/usr/bin/python3.6
+"""
+This is python executable script , system need to have python3.6 installed.
+"""
+
+import sys
+
+from app.console_request import dispatch_request
+from app.utils import Pretty
+
+if __name__ == '__main__':
+    """
+    Entry point to run the POC.
+    Default arguments can be passed to execute operations directly.    
+    """
+
+    Pretty.success('starting app.')
+
+    dispatch_request(sys.argv[1:])
+
+    Pretty.success('Exiting app.')
