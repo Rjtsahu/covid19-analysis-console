@@ -45,6 +45,16 @@ class Pretty:
                               background_color=ConsoleColor.INTENSE_BLACK)
 
     @staticmethod
+    def warn(msg):
+        """
+        Prints success message to console
+        :param msg: string message
+        :return: nothing
+        """
+        Pretty.print_colorful("WARNING: {msg}".format(msg=msg), foreground_color=ConsoleColor.BOLD_YELLOW,
+                              background_color=ConsoleColor.BG_WHITE)
+
+    @staticmethod
     def tabular(table_array):
         # TODO: implement me
         print(table_array)
