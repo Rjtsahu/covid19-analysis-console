@@ -7,5 +7,11 @@ class ConsoleOption(object):
         self.action = action
 
     def get_usage_description(self):
-        return "{key} : {title} \n {description}".format(key=self.invoke_key, title=self.title,
-                                                         description=self.description)
+
+        if self.description is None:
+            description = "No details provided."
+        else:
+            description = self.description
+
+        return "{key} : {title} \n     {description} \n".format(key=self.invoke_key, title=self.title,
+                                                                description=description)
