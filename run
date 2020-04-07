@@ -6,7 +6,7 @@ This is python executable script , system need to have python3.6 installed.
 import sys
 
 from app.console_request import dispatch_request
-from app.utils import Pretty
+from app.utils import PrettyPrint
 
 if __name__ == '__main__':
     """
@@ -14,8 +14,8 @@ if __name__ == '__main__':
     Default arguments can be passed to execute operations directly.    
     """
 
-    Pretty.success('starting app.')
+    PrettyPrint.success('starting app.')
 
     dispatch_request(sys.argv[1:])
 
-    Pretty.success('Exiting app.')
+    PrettyPrint.success('Exiting app.')

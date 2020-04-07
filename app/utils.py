@@ -1,7 +1,7 @@
 from app.entities.constants import ConsoleColor
 
 
-class Pretty:
+class PrettyPrint:
     """Static utility class to handle console output related functions"""
 
     @classmethod
@@ -23,7 +23,7 @@ class Pretty:
         :param msg: string message
         :return: nothing
         """
-        Pretty.print_colorful(msg)
+        PrettyPrint.print_colorful(msg)
 
     @staticmethod
     def error(msg):
@@ -32,7 +32,7 @@ class Pretty:
         :param msg: string message
         :return: nothing
         """
-        Pretty.print_colorful(msg, foreground_color=ConsoleColor.BOLD_RED, background_color=ConsoleColor.INTENSE_BLACK)
+        PrettyPrint.print_colorful(msg, foreground_color=ConsoleColor.BOLD_RED, background_color=ConsoleColor.INTENSE_BLACK)
 
     @staticmethod
     def success(msg):
@@ -41,8 +41,8 @@ class Pretty:
         :param msg: string message
         :return: nothing
         """
-        Pretty.print_colorful(msg, foreground_color=ConsoleColor.BOLD_GREEN,
-                              background_color=ConsoleColor.INTENSE_BLACK)
+        PrettyPrint.print_colorful(msg, foreground_color=ConsoleColor.BOLD_GREEN,
+                                   background_color=ConsoleColor.INTENSE_BLACK)
 
     @staticmethod
     def warn(msg):
@@ -51,8 +51,8 @@ class Pretty:
         :param msg: string message
         :return: nothing
         """
-        Pretty.print_colorful("WARNING: {msg}".format(msg=msg), foreground_color=ConsoleColor.BOLD_YELLOW,
-                              background_color=ConsoleColor.BG_WHITE)
+        PrettyPrint.print_colorful("WARNING: {msg}".format(msg=msg), foreground_color=ConsoleColor.BOLD_YELLOW,
+                                   background_color=ConsoleColor.BG_WHITE)
 
     @staticmethod
     def tabular(table_array):

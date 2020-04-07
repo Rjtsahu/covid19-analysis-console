@@ -7,32 +7,50 @@ from app.entities.option import ConsoleOption
 from app.exceptions.console_exceptions import AppBaseException
 from app.services.analysis_service import AnalysisService
 from app.services.dispatching import BaseConsoleDispatcher
-from app.utils import Pretty
+from app.utils import PrettyPrint
 
 
 def dispatch_request(arguments):
-    request = ConsoleRequest()
-    request.print_usage_summary()
-    key, args = request.parse_args(arguments)
+    """
+    Entry function to look for incoming request on console and continues to execute request
+    until a explicit terminated.
+    :param arguments: list of arguments passed from console.
+    :return: nothing
+    """
 
-    if key:
-        request.dispatch_request(key, *args)
+    def proceed(request):
+        """
+        Internal function to dispatch a console-request after parsing argument's
+        If operation key is not present then ignores to dispatch.
+        At last prints usage summary.
+        :param request: instance of console_request
+        :return: nothing
+        """
+
+        key, args = request.parse_args(arguments)
+
+        if key:
+            request.dispatch_request(key, *args)
+
+        request.print_usage_summary()
+
+    console_request = ConsoleRequest()
+
+    proceed(console_request)
 
     while True:
 
         try:
             arguments = input().split(' ')
         except KeyboardInterrupt:
-            Pretty.error(' Keyboard interrupt detected.')
+            PrettyPrint.error(' Keyboard interrupt detected.')
             break
 
-        key, args = request.parse_args(arguments)
-        request.dispatch_request(key, *args)
-        request.print_usage_summary()
+        proceed(console_request)
 
 
 def exit_action():
-    Pretty.success('Exiting from app.')
+    PrettyPrint.success('Exiting from app.')
     exit(0)
 
 
@@ -60,8 +78,8 @@ class ConsoleRequest(object):
             data="\n".join(self.usage_instructions))
 
     def print_usage_summary(self):
-        Pretty.print_colorful(self.get_usage_summary(), foreground_color=ConsoleColor.BOLD_YELLOW,
-                              background_color=ConsoleColor.BG_BLACK)
+        PrettyPrint.print_colorful(self.get_usage_summary(), foreground_color=ConsoleColor.BOLD_YELLOW,
+                                   background_color=ConsoleColor.BG_BLACK)
 
     def register_option(self, option: ConsoleOption):
 
@@ -71,10 +89,10 @@ class ConsoleRequest(object):
     def register_action(self, key, action):
 
         if not isinstance(action, (FunctionType, MethodType)):
-            Pretty.warn('Cannot register action, not a function.')
+            PrettyPrint.warn('Cannot register action, not a function.')
             return False
         if key in self._action_mapping:
-            Pretty.warn('Mapping of key: {key} already exists replacing with new action.'.format(key=key))
+            PrettyPrint.warn('Mapping of key: {key} already exists replacing with new action.'.format(key=key))
 
         self._action_mapping[key] = action
 
@@ -83,7 +101,7 @@ class ConsoleRequest(object):
     def dispatch_request(self, key, *args):
         try:
             if key not in self._action_mapping:
-                Pretty.error("No action associated to operation key: {key}".format(key=key))
+                PrettyPrint.error("No action associated to operation key: {key}".format(key=key))
                 return False
 
             self._action_mapping[key](*args)
@@ -91,11 +109,11 @@ class ConsoleRequest(object):
             return True
 
         except TypeError as e:
-            Pretty.error("Input argument {error} key: {key}".format(error=e, key=key))
+            PrettyPrint.error("Input argument {error} key: {key}".format(error=e, key=key))
         except AppBaseException as e:
-            Pretty.error("Error {error} key: {key}".format(error=e, key=key))
+            PrettyPrint.error("Error {error} key: {key}".format(error=e, key=key))
         except Exception as e:
-            Pretty.error("Unhandled error {error} key: {key}".format(error=e, key=key))
+            PrettyPrint.error("Unhandled error {error} key: {key}".format(error=e, key=key))
 
         return False
 
