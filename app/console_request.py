@@ -74,7 +74,7 @@ class ConsoleRequest(object):
         self.register_option(self.exit_option)
 
     def get_usage_summary(self):
-        return "            ***** COVID 19 POC ***** \n\n App Usage \n\n {data}".format(
+        return "            ***** COVID 19 POC ***** \n\n App Usage \n\n{data}".format(
             data="\n".join(self.usage_instructions))
 
     def print_usage_summary(self):

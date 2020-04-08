@@ -1,8 +1,8 @@
 class ConsoleOption(object):
 
-    def __init__(self, title='', invoke_key=None, action=None):
+    def __init__(self, title='', description=None, invoke_key=None, action=None):
         self.title = title
-        self.description = None
+        self.description = description
         self.invoke_key = str(invoke_key)
         self.action = action
 
