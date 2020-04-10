@@ -1,3 +1,7 @@
+import csv
+
+from terminaltables import AsciiTable
+
 from app.entities.constants import ConsoleColor
 
 
@@ -32,7 +36,8 @@ class PrettyPrint:
         :param msg: string message
         :return: nothing
         """
-        PrettyPrint.print_colorful(msg, foreground_color=ConsoleColor.BOLD_RED, background_color=ConsoleColor.INTENSE_BLACK)
+        PrettyPrint.print_colorful(msg, foreground_color=ConsoleColor.BOLD_RED,
+                                   background_color=ConsoleColor.INTENSE_BLACK)
 
     @staticmethod
     def success(msg):
@@ -56,8 +61,8 @@ class PrettyPrint:
 
     @staticmethod
     def tabular(table_array):
-        # TODO: implement me
-        print(table_array)
+        table = AsciiTable(table_array)
+        print(table.table)
 
 
 def read_file(file_path):
@@ -67,4 +72,17 @@ def read_file(file_path):
     :return:
     """
     with open(file_path) as file:
-        return file.readlines()
+        csv_reader = csv.reader(file, delimiter=',')
+        lines = []
+        for line in csv_reader:
+            lines.append(line)
+
+        return lines[1:]
+
+
+def get_values_of_dict(dictionary):
+    values = []
+    for i in dictionary:
+        values.append(dictionary[i])
+
+    return values

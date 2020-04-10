@@ -1,6 +1,8 @@
+import os
+
 PAGE_SIZE = 20
 
-CSV_FILE_PATH = './covid_19_data.csv'
+CSV_FILE_PATH = os.path.join(os.path.dirname(__file__), '..', '..', 'covid_19_data.csv')
 
 
 class ConsoleColor:
