@@ -36,7 +36,7 @@ class PrettyPrint:
         :param msg: string message
         :return: nothing
         """
-        PrettyPrint.print_colorful(msg, foreground_color=ConsoleColor.BOLD_RED,
+        PrettyPrint.print_colorful("\n{msg}\n".format(msg=msg), foreground_color=ConsoleColor.BOLD_RED,
                                    background_color=ConsoleColor.INTENSE_BLACK)
 
     @staticmethod
@@ -46,7 +46,7 @@ class PrettyPrint:
         :param msg: string message
         :return: nothing
         """
-        PrettyPrint.print_colorful(msg, foreground_color=ConsoleColor.BOLD_GREEN,
+        PrettyPrint.print_colorful("\n{msg}\n".format(msg=msg), foreground_color=ConsoleColor.BOLD_GREEN,
                                    background_color=ConsoleColor.INTENSE_BLACK)
 
     @staticmethod
@@ -60,8 +60,12 @@ class PrettyPrint:
                                    background_color=ConsoleColor.BG_WHITE)
 
     @staticmethod
-    def tabular(table_array):
-        table = AsciiTable(table_array)
+    def tabular(heading, table_array):
+        data = [heading, ]
+        data.extend(table_array)
+
+        table = AsciiTable(data)
+
         print(table.table)
 
 

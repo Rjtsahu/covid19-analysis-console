@@ -9,7 +9,7 @@ class AppBaseException(Exception):
         self.message = message
 
     def __str__(self):
-        return "error message : %s " % (self.message,)
+        return "Error | message : %s " % (self.message,)
 
 
 class InvalidInputException(AppBaseException):

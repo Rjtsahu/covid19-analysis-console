@@ -109,11 +109,11 @@ class ConsoleRequest(object):
             return True
 
         except TypeError as e:
-            PrettyPrint.error("Input argument {error} key: {key}".format(error=e, key=key))
+            PrettyPrint.error("Input argument | {error} | key: {key}".format(error=e, key=key))
         except AppBaseException as e:
-            PrettyPrint.error("Error {error} key: {key}".format(error=e, key=key))
+            PrettyPrint.error("{error} | key: {key}".format(error=e, key=key))
         except Exception as e:
-            PrettyPrint.error("Unhandled error {error} key: {key}".format(error=e, key=key))
+            PrettyPrint.error("Unhandled error | {error} | key: {key}".format(error=e, key=key))
 
         return False
 

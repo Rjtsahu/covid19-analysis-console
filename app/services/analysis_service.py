@@ -1,9 +1,11 @@
 from copy import deepcopy
+from datetime import datetime
 from typing import List
 
 from app.entities.constants import CSV_FILE_PATH, PAGE_SIZE
 from app.entities.covid_case import CaseObservation
 from app.entities.option import ConsoleOption
+from app.exceptions.console_exceptions import InvalidInputException
 from app.services.csv_data_provider import CsvCovidDataProvider
 from app.services.data_provider import CovidDataProvider
 from app.services.dispatching import BaseConsoleDispatcher
@@ -56,7 +58,7 @@ class AnalysisService(BaseConsoleDispatcher):
             if str(page_number).isdigit():
                 page_number = int(page_number)
             else:
-                page_number = 1
+                raise InvalidInputException('Invalid page number : %s' % (page_number,))
         if page_number < 1:
             page_number = 1
 
@@ -76,18 +78,23 @@ class AnalysisService(BaseConsoleDispatcher):
         such as : total cases, total deaths, total recovered and observation date of first case
         :return: nothing
         """
-        # TODO : implement me
-        self.cases = None
-        PrettyPrint.warn('not implemented')
+        country_cases = self.__get_cases_for_country__(country_name)
+        if not country_cases:
+            raise InvalidInputException('Invalid country name %s' % (country_name,))
+        # get record having max cases.
+        record = max(country_cases, key=lambda case: case.observation.confirmed)
+
+        PrettyPrint.success(record)
 
     def show_peak_case_for_country(self, country_name):
         """
-        Function that prints max no of cases occurred in a particular function.
+        Function that prints max no of cases occurred in a particular date.
         :return: nothing
         """
-        # TODO : implement me
-        self.cases = None
-        PrettyPrint.warn('not implemented')
+        record, peek_cases = self.__get_peak_case_for_country__(country_name)
+
+        PrettyPrint.info("Peak cases: %s" % (peek_cases,))
+        PrettyPrint.success(record)
 
     def get_options(self):
         return [
@@ -126,11 +133,44 @@ class AnalysisService(BaseConsoleDispatcher):
     def print_cases(cls, cases: List[CaseObservation]):
         cases_data = [[case.observation_date, case.country.country_name, case.observation.confirmed,
                        case.observation.deaths, case.observation.recovered] for case in cases]
-        data = [cls.table_headings, ]
-        data.extend(cases_data)
 
-        PrettyPrint.tabular(data)
+        PrettyPrint.tabular(cls.table_headings, cases_data)
 
+    def __get_cases_for_country__(self, country_name) -> List[CaseObservation]:
+        """
+        Function filters cases based on country name (case insensitive)
+        :param country_name: name of country
+        :return: list of case_observation
+        """
+        country_cases = []
 
-if __name__ == '__main__':
-    AnalysisService()
+        for item in self.cases:
+            if item.country.country_name.lower() == country_name.lower():
+                country_cases.append(deepcopy(item))
+
+        return country_cases
+
+    def __get_peak_case_for_country__(self, country_name) -> Tuple[CaseObservation, int]:
+        """
+        Function to find case having max diff (peak) of case from one-dey to another (asc order of date)
+        :param country_name: country_name
+        :return: tuple of case and peek case count
+        """
+
+        country_cases = self.__get_cases_for_country__(country_name)
+        if not country_cases:
+            raise InvalidInputException('Invalid country name %s' % (country_name,))
+
+        # sort record with date (observation_date)
+        country_cases = sorted(country_cases, key=lambda _case: datetime.strptime(_case.observation_date, '%m/%d/%Y'))
+
+        max_diff = 0
+        case = country_cases[0]
+
+        for index in range(len(country_cases) - 1):
+            diff = country_cases[index + 1].observation.confirmed - country_cases[index].observation.confirmed
+            if diff >= max_diff:
+                max_diff = diff
+                case = country_cases[index + 1]
+
+        return case, max_diff
