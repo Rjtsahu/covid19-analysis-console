@@ -50,12 +50,25 @@ def dispatch_request(arguments):
 
 
 def exit_action():
+    """
+    Function to execute exit operation.
+    :return: nothing
+    """
     PrettyPrint.success('Exiting from app.')
     exit(0)
 
 
 class ConsoleRequest(object):
+    """
+    Class to setup execute and process a console request.
+
+    :param executable_services : List storing all the dependencies (instance of BaseConsoleDispatcher)
+    that should be register as an action.
+    :param exit_option : constant instance of console option for exit action.
+    """
+
     executable_services: List[Type[BaseConsoleDispatcher]] = [AnalysisService]
+
     exit_option = ConsoleOption(title='Exits from app.', invoke_key='exit',
                                 action=exit_action)
 
@@ -65,6 +78,12 @@ class ConsoleRequest(object):
         self.__setup__()
 
     def __setup__(self):
+        """
+        Sets up all actions.
+
+        This function binds all keys to defined actions, it will pick all options
+        defined in executable_services by fetching options from get_options() function.
+        """
 
         for service in self.executable_services:
             if inspect.isclass(service):
@@ -74,19 +93,25 @@ class ConsoleRequest(object):
         self.register_option(self.exit_option)
 
     def get_usage_summary(self):
+        """  Function constructs formatted string to show usage of POC."""
+
         return "            ***** COVID 19 POC ***** \n\n App Usage \n\n{data}".format(
             data="\n".join(self.usage_instructions))
 
     def print_usage_summary(self):
+        """ Function prints usage summary."""
+
         PrettyPrint.print_colorful(self.get_usage_summary(), foreground_color=ConsoleColor.BOLD_YELLOW,
                                    background_color=ConsoleColor.BG_BLACK)
 
     def register_option(self, option: ConsoleOption):
+        """ Register option in service IOC container. """
 
         if self.register_action(option.invoke_key, option.action):
             self.usage_instructions.append(option.get_usage_description())
 
     def register_action(self, key, action):
+        """ Function binds a key with action. """
 
         if not isinstance(action, (FunctionType, MethodType)):
             PrettyPrint.warn('Cannot register action, not a function.')

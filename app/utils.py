@@ -61,6 +61,12 @@ class PrettyPrint:
 
     @staticmethod
     def tabular(heading, table_array):
+        """
+        Prints table in console.
+        :param heading: list of heading title
+        :param table_array: 2 dims array representing table.
+        :return:
+        """
         data = [heading, ]
         data.extend(table_array)
 
@@ -69,7 +75,7 @@ class PrettyPrint:
         print(table.table)
 
 
-def read_file(file_path):
+def read_csv_file(file_path):
     """
     Function to read a file
     :param file_path: path to file
@@ -85,6 +91,12 @@ def read_file(file_path):
 
 
 def get_values_of_dict(dictionary):
+    """
+    Utility function that convert dictionary to list of values present in it.
+    :param dictionary: dictionary
+    :return: list of values in dict
+    """
+
     values = []
     for i in dictionary:
         values.append(dictionary[i])

@@ -7,4 +7,4 @@ class BaseConsoleDispatcher(object):
 
     def get_options(self) -> List[ConsoleOption]:
         """Abstract method need to override"""
-        pass
+        raise Exception('This needs to override.')

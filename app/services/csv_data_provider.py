@@ -2,7 +2,7 @@ from typing import List
 
 from app.entities.covid_case import CaseObservation
 from app.services.data_provider import CovidDataProvider
-from app.utils import get_values_of_dict, read_file
+from app.utils import get_values_of_dict, read_csv_file
 
 
 class CsvCovidDataProvider(CovidDataProvider):
@@ -12,7 +12,7 @@ class CsvCovidDataProvider(CovidDataProvider):
 
     def get_data(self) -> List[CaseObservation]:
 
-        lines = read_file(self.file_path)
+        lines = read_csv_file(self.file_path)
 
         if len(lines) == 0:
             return []

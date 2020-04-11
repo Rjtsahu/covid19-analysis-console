@@ -8,7 +8,7 @@ class CovidDataProvider(object):
 
     def get_data(self) -> List[CaseObservation]:
         """Abstract base class to fetch list of covid cases."""
-        raise Exception("Need to extend this method")
+        raise Exception("This needs to override.")
 
     @classmethod
     def group_cases_by_country_and_date(cls, cases: List[Dict[str, str]]):
