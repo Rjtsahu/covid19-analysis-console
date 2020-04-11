@@ -1,6 +1,6 @@
 from copy import deepcopy
 from datetime import datetime
-from typing import List
+from typing import List, Tuple
 
 from app.entities.constants import CSV_FILE_PATH, PAGE_SIZE
 from app.entities.covid_case import CaseObservation
