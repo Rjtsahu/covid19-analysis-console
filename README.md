@@ -6,7 +6,7 @@ Python Console POC to extract COVID cases information from CSV file.
 
 ```bash
 # to install all packages run
-> pip install -m requirements.txt
+> pip install -r requirements.txt
 
 # run the program on terminal
 > ./run param1 param2
